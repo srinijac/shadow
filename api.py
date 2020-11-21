@@ -2,10 +2,10 @@ from flask import Flask, request, render_template,jsonify
 
 app = Flask(__name__)
 
-def do_something(text1,text2):
-   text1 = text1.upper()
-   text2 = text2.upper()
-   combine = text1 + text2
+def do_something(name,handle):
+   name = name.upper()
+   handle = handle.upper()
+   combine = name + handle
    return combine
 
 @app.route('/')
@@ -14,10 +14,10 @@ def home():
 
 @app.route('/join', methods=['GET','POST'])
 def my_form_post():
-    text1 = request.form['text1']
-    word = request.args.get('text1')
-    text2 = request.form['text2']
-    combine = do_something(text1,text2)
+    name = request.form['name']
+    word = request.args.get('name')
+    handle = request.form['handle']
+    combine = do_something(name,handle)
     result = {
         "output": combine
     }

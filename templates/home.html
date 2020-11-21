@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>First Flask App</title>
+    <title>Twitter Shadow Bot</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 </head>
@@ -10,13 +10,13 @@
 <script>
 
 function myFunction() {
-var text1= $('#text1').val();
-var text2= $('#text2').val();
+var name= $('#handle').val();
+var handle= $('#handle').val();
   $.ajax({
               url: "/join",
               type: "POST",
-              data: {text1:text1,
-              text2:text2}
+              data: {name:name,
+              handle:handle}
 
           }).done(function(response) {
 
@@ -36,10 +36,10 @@ var text2= $('#text2').val();
   </script>
 <body>
     <p>
-        Taking input from web<br><br>
+        Hi! Let's make your Twitter Shadow:<br><br>
 
-            Text_Value1<input type="text" id="text1" name="text1"><br><br>
-            Text_Value2<input type="text" id="text2" name="text2"><br><br>
+            What's your name?<input type="text" id="name" name="name"><br><br>
+            What's your Twitter handle?<input type="text" id="handle" name="handle"><br><br>
             <button id="clicked" onclick="myFunction()">Submit</button>
         </p>
     <div class="show-data" >
