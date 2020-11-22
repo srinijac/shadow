@@ -32,7 +32,6 @@ def respond_hello(api):
     self_obj = api.me()
     self_info = json.loads(json.dumps(self_obj._json))
     self_id = self_info["id"]
-    print("self", self_id)
 
     messages = api.list_direct_messages()
     senders = []
@@ -44,7 +43,6 @@ def respond_hello(api):
         if sender not in senders and str(sender) != str(self_id):
             senders.append(sender)
 
-    print(senders)
     # global sent
 
     for s in senders:
@@ -78,31 +76,26 @@ def report(api, id, score):
     scaled = polarity * 5 + 5
     response += str(round(scaled, 2)) + "."
     api.send_direct_message(id, response)
-    print(response)
 
     response = "we also looked at how personal your feed seemed to be. on a scale of 0 to 10 (0 being most impersonal, 10 as most personal), your feed scores a "
     scaled = score.sentiment[1] * 10
     response += str(round(scaled, 2)) + "."
     api.send_direct_message(id, response)
-    print(response)
 
     response = "here's something to listen to that might fit your mood: " + random.choice(playlist)
     api.send_direct_message(id, response)
-    print(response)
 
     return
 
 def recommend(api, id, keywords):
     positive = keywords.split()
     positive.sort(key = lambda w: TextBlob(w).sentiment[0], reverse = True)
-    print(positive)
     
     count = 0
     while count < 3 and len(positive) > 3:
         query = positive.pop(0) + " " + positive.pop(0) + " " + positive.pop(0)
         result = api.search(query, result_type="mixed", count=1)
         
-        print(query)
         for r in result:
             screen_name = r.user.screen_name
             tweet_id = r.id_str
@@ -113,7 +106,6 @@ def recommend(api, id, keywords):
             tweet_text = "@" + str(user.screen_name) + " " + random.choice(notes) + "\n" + str(url)
             tweet = api.update_status(tweet_text)
         except Exception as e:
-            # print(e)
             pass
         count += 1
 
