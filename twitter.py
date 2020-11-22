@@ -2,29 +2,30 @@ import tweepy
 from time import sleep
 from credentials import *
 import os
+import json
+from collections import defaultdict
 
 # login to twitter account api
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
 api = tweepy.API(auth)
 
-# Open text file verne.txt (or your chosen file) for reading
-my_file = open('tweet.txt', 'r')
+self_obj = api.me()
+self_info = json.loads(json.dumps(self_obj._json))
+self_id = self_info["id"]
+print("self", self_id)
 
-# Read lines one by one from my_file and assign to file_lines variable
-file_lines = my_file.readlines()
+messages = api.list_direct_messages()
+senders = []
+for dm_obj in messages:
+    dm_obj = str(json.dumps(dm_obj._json))
+    dm_json = json.loads(dm_obj)
+    sender = dm_json["message_create"]["sender_id"]
 
-# Close file
-my_file.close()
+    if sender not in senders and str(sender) != str(self_id):
+        senders.append(sender)
 
-for line in file_lines:
-# Add try ... except block to catch and output errors
-    try:
-        print(line)
-        if line != '\n':
-            api.update_status(line)
-        else:
-            pass
-    except tweepy.TweepError as e:
-        print(e.reason)
-    sleep(5)
+print(senders)
+
+for s in senders:
+    api.send_direct_message(int(s), "hello")
