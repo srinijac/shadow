@@ -1,4 +1,8 @@
 import json
+from textblob import TextBlob
+import random
+
+notes = ["enjoy!", "for you:", "check this out!", "you might like this!", "take a look:"]
 
 def respond_hello(api):
     self_obj = api.me()
@@ -17,7 +21,6 @@ def respond_hello(api):
             senders.append(sender)
 
     print(senders)
-
     # global sent
 
     for s in senders:
@@ -28,7 +31,15 @@ def respond_hello(api):
 
 def report(api, id, score):
     response = ""
+
+    friend_score = score[-1]
+    friend_polarity = friend_score.sentiment[0]
+
+    score = score[0]
     polarity = score.sentiment[0]
+    
+    polarity = 0.2 * polarity + 0.8 * friend_polarity
+
     if polarity > 0:
         response += "right now, the text on your feed looks positive! "
     elif polarity < 0:
@@ -51,5 +62,29 @@ def report(api, id, score):
     response += str(round(scaled, 2)) + "."
     # api.send_direct_message(id, response)
     print(response)
+
+    return
+
+def recommend(api, id, keywords):
+    positive = keywords.split()
+    positive.sort(key = lambda w: TextBlob(w).sentiment[0], reverse = True)
+    print(positive)
+    
+    count = 0
+    while count < 3 and len(positive) > 3:
+        query = positive.pop(0) + " " + positive.pop(0) + " " + positive.pop(0)
+        result = api.search(query, result_type="popular", count=1)
+        
+        print(query)
+        for r in result:
+            screen_name = r.user.screen_name
+            tweet_id = r.id_str
+            url = "https://twitter.com/" + screen_name + "/status/" + tweet_id
+        
+        user = api.get_user(id)
+        tweet_text = "@" + str(user.screen_name) + " " + random.choice(notes) + "\n" + str(url)
+        tweet = api.update_status(tweet_text)
+
+        count += 1
 
     return
