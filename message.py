@@ -100,7 +100,7 @@ def recommend(api, id, keywords):
     count = 0
     while count < 3 and len(positive) > 3:
         query = positive.pop(0) + " " + positive.pop(0) + " " + positive.pop(0)
-        result = api.search(query, result_type="popular", count=1)
+        result = api.search(query, result_type="mixed", count=1)
         
         print(query)
         for r in result:
@@ -113,7 +113,8 @@ def recommend(api, id, keywords):
             tweet_text = "@" + str(user.screen_name) + " " + random.choice(notes) + "\n" + str(url)
             tweet = api.update_status(tweet_text)
         except Exception as e:
-            print(e)
+            # print(e)
+            pass
         count += 1
 
     return
