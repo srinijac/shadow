@@ -2,7 +2,31 @@ import json
 from textblob import TextBlob
 import random
 
-notes = ["enjoy!", "for you:", "check this out!", "you might like this!", "take a look:"]
+notes = ["enjoy!", "for you:", "check this out!", "you might like this!", "take a look:", "looking for this?", "your shadow tells me you might like this", "from your shadow,"]
+
+negative_pl = ["https://open.spotify.com/playlist/5FmmxErJczcrEwIFGIviYo", 
+"https://open.spotify.com/playlist/37i9dQZF1DX2yvmlOdMYzV", 
+"https://open.spotify.com/playlist/37i9dQZF1DWTQwRw56TKNc",  
+"https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn",  
+"https://open.spotify.com/playlist/37i9dQZF1DWTx0xog3gN3q", 
+"https://open.spotify.com/playlist/37i9dQZF1DXdbXrPNafg9d", 
+"https://open.spotify.com/playlist/37i9dQZF1DX4sWSpwq3LiO", 
+"https://www.youtube.com/watch?v=g8NVwN0_mks&ab_channel=knoPianoMusic"]
+neutral_pl = ["https://open.spotify.com/playlist/37i9dQZF1DX4UtSsGT1Sbe",
+"https://open.spotify.com/album/0WSpHK6tinGHU4gvP8fHih", 
+"https://open.spotify.com/album/0k6vua6Xz4B14Lwl7VBonP", 
+"https://open.spotify.com/playlist/7jnm4kGjsaT08AbVB5798m", 
+"https://open.spotify.com/playlist/0rZJqZmX61rQ4xMkmEWQar", 
+"https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2", 
+"https://open.spotify.com/playlist/37i9dQZF1DX5Ejj0EkURtP", ]
+positive_pl = ["https://www.youtube.com/watch?v=p1IChPfD2-s&ab_channel=HappyMusic",
+"https://open.spotify.com/playlist/37i9dQZF1DX9XIFQuFvzM4", 
+"https://open.spotify.com/playlist/37i9dQZF1DX9wC1KY45plY",  
+"https://open.spotify.com/artist/3fMbdgg4jU18AjLCKBhRSm", 
+"https://open.spotify.com/playlist/37i9dQZF1DXa2PvUpywmrr", 
+"https://open.spotify.com/playlist/37i9dQZF1DWY4xHQp97fN6", 
+"https://open.spotify.com/playlist/37i9dQZF1DWWXrKtH3fzUd", 
+"https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n",]
 
 def respond_hello(api):
     self_obj = api.me()
@@ -42,25 +66,28 @@ def report(api, id, score):
 
     if polarity > 0:
         response += "right now, the text on your feed looks positive! "
+        playlist = positive_pl
     elif polarity < 0:
         response += "right now, the text on your feed looks negative :( "
+        playlist = negative_pl
     else:
         response += "right now, your feed is neutral. "
+        playlist = neutral_pl
 
     response += "on a scale of 0 to 10 (0 being most negative, 10 as most positive), your feed scores a "
     scaled = polarity * 5 + 5
     response += str(round(scaled, 2)) + "."
-    # api.send_direct_message(id, response)
+    api.send_direct_message(id, response)
     print(response)
 
-    response = "we also looked at how personal your feed seemed to be."
-    # api.send_direct_message(id, response)
-    # print(response)
-
-    response = "on a scale of 0 to 10 (0 being most impersonal, 10 as most personal), your feed scores a "
+    response = "we also looked at how personal your feed seemed to be. on a scale of 0 to 10 (0 being most impersonal, 10 as most personal), your feed scores a "
     scaled = score.sentiment[1] * 10
     response += str(round(scaled, 2)) + "."
-    # api.send_direct_message(id, response)
+    api.send_direct_message(id, response)
+    print(response)
+
+    response = "here's something to listen to that might fit your mood: " + random.choice(playlist)
+    api.send_direct_message(id, response)
     print(response)
 
     return

@@ -13,11 +13,10 @@ sent = respond_hello(api)
 
 def main():
     shadowing = api.followers_ids() 
-    for id in shadowing: # can use mentions_timeline?
+    for id in shadowing:
         self_score, friends_score, keywords = analyze(api, id)
         report(api, id, [self_score, friends_score])
         print(keywords)
         recommend(api, id, keywords)
-        break
 
 main()

@@ -32,15 +32,15 @@ def get_user_text(api, id):
 def analyze(api, id):
     self_text = get_user_text(api, id)
     self_score = TextBlob(self_text)
-    print(self_text)
-    print(id, self_score.sentiment)
+    # print(self_text)
+    # print(id, self_score.sentiment)
 
     friends = api.friends_ids(id)
     friends_text = ""
     for f_id in friends:
         friends_text += get_user_text(api, f_id) + " "
     friends_score = TextBlob(friends_text)
-    print("friend", friends_score.sentiment)
+    # print("friend", friends_score.sentiment)
 
     keywords = most_frequent(self_text + friends_text)
     return self_score, friends_score, keywords
@@ -60,7 +60,7 @@ def most_frequent(text):
     significant = ""
     for word, count in word_counter.most_common(300):
         if len(word) > 4:
-            print(word, ": ", count)
+            # print(word, ": ", count)
             significant += " " + word
 
     return significant
