@@ -18,13 +18,13 @@ def respond_hello(api):
 
     print(senders)
 
-    global sent
+    # global sent
 
-    for s in senders and s not in sent:
+    for s in senders:
         api.send_direct_message(int(s), "hello")
-        sent.append(s)
+        # sent.append(s)
 
-    return sent
+    return
 
 def report(api, id, score):
     response = ""
@@ -39,17 +39,17 @@ def report(api, id, score):
     response += "on a scale of 0 to 10 (0 being most negative, 10 as most positive), your feed scores a "
     scaled = polarity * 5 + 5
     response += str(round(scaled, 2)) + "."
-    api.send_direct_message(id, response)
-    # print(response)
+    # api.send_direct_message(id, response)
+    print(response)
 
     response = "we also looked at how personal your feed seemed to be."
-    api.send_direct_message(id, response)
+    # api.send_direct_message(id, response)
     # print(response)
 
     response = "on a scale of 0 to 10 (0 being most impersonal, 10 as most personal), your feed scores a "
     scaled = score.sentiment[1] * 10
     response += str(round(scaled, 2)) + "."
-    api.send_direct_message(id, response)
-    # print(response)
+    # api.send_direct_message(id, response)
+    print(response)
 
     return
