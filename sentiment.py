@@ -2,6 +2,7 @@ from textblob import TextBlob
 import collections
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
+import random
 
 stop_words = set(stopwords.words('english')) 
 
@@ -36,6 +37,8 @@ def analyze(api, id):
     # print(id, self_score.sentiment)
 
     friends = api.friends_ids(id)
+    num_sampled = min(len(friends), 150)
+    friends = random.sample(friends, num_sampled)
     friends_text = ""
     for f_id in friends:
         friends_text += get_user_text(api, f_id) + " "
@@ -59,7 +62,7 @@ def most_frequent(text):
     word_counter = collections.Counter(wordcount)
     significant = ""
     for word, count in word_counter.most_common(300):
-        if len(word) > 4:
+        if len(word) > 5:
             # print(word, ": ", count)
             significant += " " + word
 

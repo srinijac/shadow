@@ -1,6 +1,6 @@
 import tweepy
 from credentials import *
-from dm import *
+from message import *
 from sentiment import *
 
 # login to twitter account api
@@ -16,7 +16,6 @@ def main():
     for id in shadowing:
         self_score, friends_score, keywords = analyze(api, id)
         report(api, id, [self_score, friends_score])
-        print(keywords)
         recommend(api, id, keywords)
 
 main()

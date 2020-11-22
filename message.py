@@ -65,10 +65,10 @@ def report(api, id, score):
     polarity = 0.2 * polarity + 0.8 * friend_polarity
 
     if polarity > 0:
-        response += "right now, the text on your feed looks positive! "
+        response += "right now, your feed looks positive! "
         playlist = positive_pl
     elif polarity < 0:
-        response += "right now, the text on your feed looks negative :( "
+        response += "right now, your feed looks negative :( "
         playlist = negative_pl
     else:
         response += "right now, your feed is neutral. "
@@ -109,9 +109,11 @@ def recommend(api, id, keywords):
             url = "https://twitter.com/" + screen_name + "/status/" + tweet_id
         
         user = api.get_user(id)
-        tweet_text = "@" + str(user.screen_name) + " " + random.choice(notes) + "\n" + str(url)
-        tweet = api.update_status(tweet_text)
-
+        try:
+            tweet_text = "@" + str(user.screen_name) + " " + random.choice(notes) + "\n" + str(url)
+            tweet = api.update_status(tweet_text)
+        except Exception as e:
+            print(e)
         count += 1
 
     return
