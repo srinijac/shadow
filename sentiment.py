@@ -30,9 +30,14 @@ def analyze(api, id):
     # print(id, self_score.sentiment)
 
     friends = api.friends_ids(id)
+    friends_text = ""
+    for f_id in friends:
+        friends_text += get_user_text(api, f_id) + " "
+    friends_text.trim()
+    friends_score = TextBlob(friends_text)
 
-    most_frequent(self_text)
-    return self_score
+    most_frequent(self_text + friends_text)
+    return (self_score * 0.8) + (friends_score * 0.2)
 
 def most_frequent(text):
     str_list = text.lower().split()
